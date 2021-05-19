@@ -1,3 +1,39 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --color-text-base: #1A1818;
+    --color-text-inverted: #F3FFF3;
+
+    --color-header-main: #fff;
+    --color-header-inverted: #2A3451;
+
+    --color-body-main: #eee;
+    --color-body-inverted: #523C3C;
+  }
+  .dark-theme {
+    --color-text-base: #1AF4BF;
+    --color-text-inverted: #EA2F2F;
+
+    --color-header-main: #218291;
+    --color-header-inverted: #2A3451;
+
+    --color-body-main: #BB24B0;
+    --color-body-inverted: #C3C200;
+  }
+}
+
+.toggle-checkbox:checked {
+  /* @apply: right-0 border-green-400; */
+  right: 0;
+  border-color: #218291;
+  /* transition: all 1s; */
+}
+
+.toggle-checkbox:checked + .toggle-label {
+  /* @apply: bg-green-400; */
+  background-color: #2ED3C3;
+  /* transition: all 1s; */
+}
