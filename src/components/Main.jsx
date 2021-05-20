@@ -1,4 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { connect } from 'react-redux';
+import { fetchClubs } from '../reducers/actions/clubsActions';
 
 import mainPhoto from '../img/main_photo.png';
 import mainIcon1 from '../img/main_icon1.png';
@@ -6,6 +10,14 @@ import mainIcon2 from '../img/main_icon2.png';
 import mainIcon3 from '../img/main_icon3.png';
 
 function Main() {
+  const dispatch = useDispatch();
+  const clubs = useSelector(state => state.clubs.items);
+  console.log(clubs, 'clubs - main');
+
+  useEffect(() => {
+    dispatch(fetchClubs());
+  }, [])
+
   return (
     <main className="bg-gradient-to-br from-transparent to-green-50">
       <section className="mx-16 py-40 flex justify-between">
@@ -80,8 +92,13 @@ function Main() {
 
         </form>
       </section>
+
+      <section>
+        {clubs.length > 0 && (<h2>{clubs.length}</h2>)}
+        {clubs.length === 0 && (<h2>Clubs length: {clubs.length}</h2>)}
+      </section>
     </main>
-  );
+  )
 };
 
 export default Main;
