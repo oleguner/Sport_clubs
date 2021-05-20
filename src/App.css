@@ -1,1 +1,17 @@
+.App {
+  height: 100vh;
+}
 
+.search {
+  top: 1.2rem;
+}
+
+.main-photo {
+  width: 40rem;
+}
+
+.main-icon {
+  width: 50px;
+  position: absolute;
+  right: 0;
+}

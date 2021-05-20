@@ -26,14 +26,10 @@
 }
 
 .toggle-checkbox:checked {
-  /* @apply: right-0 border-green-400; */
   right: 0;
-  border-color: #218291;
-  /* transition: all 1s; */
+  border-color: rgba(209, 213, 219, var(--tw-bg-opacity));
 }
 
 .toggle-checkbox:checked + .toggle-label {
-  /* @apply: bg-green-400; */
-  background-color: #2ED3C3;
-  /* transition: all 1s; */
+  background-color: rgba(229, 231, 235, var(--tw-bg-opacity));
 }

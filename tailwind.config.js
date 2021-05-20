@@ -14,7 +14,8 @@ module.exports = {
           'header-main': 'var(--color-header-main)',
           'header-inverted': 'var(--color-header-inverted)',
           'body-main': 'var(--color-body-main)',
-          'body-inverted': 'var(--color-body-inverted)'
+          'body-inverted': 'var(--color-body-inverted)',
+          'theme-toggle': '#218291',
         }
       }
     },
