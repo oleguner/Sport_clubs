@@ -1,5 +1,5 @@
 import {
-  FETCH_CLUBS, SORT_CLUBS, SELECT_CITY
+  FETCH_CLUBS, SORT_CLUBS, SELECT_CITY, SELECT_LANG
 } from './type';
 
 export const fetchClubs = () => (dispatch) => {
@@ -30,5 +30,12 @@ export const selectCity = (city) => (dispatch) => {
   dispatch({
     type: SELECT_CITY,
     payload: city,
+  })
+}
+
+export const selectLang = (lang) => (dispatch) => {
+  dispatch({
+    type: SELECT_LANG,
+    payload: lang,
   })
 }

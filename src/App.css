@@ -14,7 +14,7 @@
 .main-icon {
   width: 50px;
   position: absolute;
-  right: 0;
+  left: -50px;
 }
 
 .slider-active {
@@ -22,24 +22,25 @@
   left: calc(50%);
   opacity: 1;
   transition: opacity 0.5s ease-in-out;
+  z-index: 1;
 }
 
 .slider-hidden-right {
   position: absolute;
   right: -100%;
-  z-index: -10;
   opacity: 0.1;
   transition: right 0.3s ease-in-out,
-    opacity 0.3s ease-in-out;
+  opacity 0.3s ease-in-out;
+  z-index: -10;
 }
 
 .slider-hidden-left {
   position: absolute;
   left: -100%;
-  z-index: -10;
   opacity: 0.1;
   transition: left 0.3s ease-in-out,
-    opacity 0.3s ease-in-out;
+  opacity 0.3s ease-in-out;
+  z-index: -10;
 }
 
 body {
