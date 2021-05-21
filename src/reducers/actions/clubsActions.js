@@ -1,5 +1,5 @@
 import {
-  FETCH_CLUBS, SORT_CLUBS_BY_INPUT, SORT_CLUBS_BY_TAGS
+  FETCH_CLUBS, SORT_CLUBS, SELECT_CITY
 } from './type';
 
 export const fetchClubs = () => (dispatch) => {
@@ -17,4 +17,18 @@ export const fetchClubs = () => (dispatch) => {
         payload: clubsWithId,
       })
     });
+}
+
+export const sortClubs = (sortedClubs) => (dispatch) => {
+  dispatch({
+    type: SORT_CLUBS,
+    payload: sortedClubs,
+  })
+}
+
+export const selectCity = (city) => (dispatch) => {
+  dispatch({
+    type: SELECT_CITY,
+    payload: city,
+  })
 }

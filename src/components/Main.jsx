@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { fetchClubs } from '../reducers/actions/clubsActions';
+import { fetchClubs, sortClubs } from '../reducers/actions/clubsActions';
 
 import mainPhoto from '../img/main_photo.png';
 import mainIcon1 from '../img/main_icon1.png';
@@ -9,27 +9,33 @@ import mainIcon2 from '../img/main_icon2.png';
 import mainIcon3 from '../img/main_icon3.png';
 import ClubsList from './ClubsList';
 import ClubsSlider from './ClubsSlider';
+import CitiesDropdown from './CitiesDropdown';
 
 import { filtersEng } from '../activities';
 
 function Main() {
   const dispatch = useDispatch();
   const clubs = useSelector(state => state.clubs.items);
-  const cities = useSelector(state => console.log(state));
+  const sortedClubs = useSelector(state => state.clubs.sortedClubs);
+  const city = useSelector(state => state.clubs.city);
+  const cities = useSelector(state => state);
+  // console.log(clubs, 'clubs');
+  console.log(city, 'city');
   console.log(cities, 'cities');
 
   const [isListActive, setListActive] = useState(true);
   const [isSladerActive, setSliderActive] = useState(false);
   const [inputValue, setInputValue] = useState('');
-  const [sortedClubs, setSortedClubs] = useState(clubs);
 
   useEffect(() => {
     dispatch(fetchClubs());
   }, [dispatch]);
 
   useEffect(() => {
-    setSortedClubs(clubs);
-  }, [clubs]);
+    if (inputValue.length === 0) {
+      dispatch(sortClubs(clubs));
+    }
+  }, [inputValue, dispatch]);
 
   const handleClubsDisplay = (e) => {
     if (e.target.textContent === 'BY LIST') {
@@ -48,7 +54,7 @@ function Main() {
     const filtredClubs = clubs.filter(club => club.activity.find(el =>
       el.title.includes(e.target.value)
       || el.slug.includes(e.target.value)));
-    setSortedClubs(filtredClubs);
+    dispatch(sortClubs(filtredClubs));
   };
 
   const handleClubsActivitiesDisplay = (e) => {
@@ -60,19 +66,23 @@ function Main() {
       e.target.textContent = 'Hide';
       buttondsDiv.classList = 'block';
     }
-
   };
 
   const handleClickFilter = (e) => {
     setInputValue('');
+    document.querySelectorAll('.sport-button').forEach(button => {
+      console.log(button);
+      // button.classlist.remove('bg-red-500');
+    })
     if (e.target.textContent === 'All') {
-      setSortedClubs(clubs);
+      // e.target.classlist.add('bg-red-500');
+      console.log(e.target, 'e.target');
+      dispatch(sortClubs(clubs));
       return;
     }
 
     const handleText = e.target.textContent.toLowerCase()
       .replace(/ /g, '');
-    console.log(handleText);
     const filtredClubs = clubs.filter(club => club.activity.find(el => {
       const lowerCaseActivity1 = el.title.toLowerCase();
       const lowerCaseActivity2 = el.slug.toLowerCase();
@@ -80,8 +90,22 @@ function Main() {
       return lowerCaseActivity1.includes(handleText)
         || lowerCaseActivity2.includes(handleText)
     }));
-    setSortedClubs(filtredClubs);
-  }
+    dispatch(sortClubs(filtredClubs));
+  };
+
+  const filterByCity = (clubList) => {
+    if (city === 'all') {
+      return clubList;
+    } else {
+      return clubList.filter(club => {
+        if (city === 'all') {
+          return club;
+        } else {
+          return club.city.slug === city;
+        }
+      });
+    }
+  };
 
   return (
     <main className="bg-gradient-to-br from-transparent to-green-50 pb-16 overflow-hidden">
@@ -145,7 +169,7 @@ function Main() {
         </label>
         <form
           action="#"
-          className="relative w-96 pb-16"
+          className="relative w-96 pb-8"
           onSubmit={(e) => e.preventDefault()}
         >
           <input
@@ -161,13 +185,15 @@ function Main() {
             <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
           </svg>
 
+          <CitiesDropdown />
+
         </form>
       </section>
 
       <section className="mx-16 mb-8">
         <span className="text-lg font-bold">Activities:</span>
         <button
-          className="bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-1 px-2 border border-gray-500 hover:border-transparent rounded ml-4 transform -translate-y-2"
+          className="bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-1 px-2 border border-gray-500 hover:border-transparent rounded ml-4"
           onClick={handleClubsActivitiesDisplay}
         >
           Hide
@@ -176,8 +202,9 @@ function Main() {
         <div id="activities-buttons">
           {filtersEng.map(sport =>
             <button
-              className="bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-2 px-4 border border-gray-500 hover:border-transparent rounded mr-2 my-2"
+              className="sport-button bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-2 px-4 border border-gray-500 hover:border-transparent rounded mr-2 my-2"
               onClick={handleClickFilter}
+              key={sport}
             >
               {sport}
             </button>
@@ -205,10 +232,10 @@ function Main() {
         </div>
 
         {sortedClubs.length > 0 && isListActive
-          && <ClubsList clubs={sortedClubs} />}
+          && <ClubsList clubs={filterByCity(sortedClubs)} />}
 
         {sortedClubs.length > 0 && isSladerActive
-          && <ClubsSlider clubs={sortedClubs} />}
+          && <ClubsSlider clubs={filterByCity(sortedClubs)} />}
       </section>
     </main>
   )
