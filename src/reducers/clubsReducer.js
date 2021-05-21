@@ -1,11 +1,13 @@
 import {
-  FETCH_CLUBS, SORT_CLUBS, SELECT_CITY
+  FETCH_CLUBS, SORT_CLUBS, SELECT_CITY, SELECT_LANG
 } from './actions/type';
+import cities from '../cities';
 
 const initialState = {
   items: [],
   sortedClubs: [],
-  city: 'All'
+  city: 'All',
+  lang: 'ENG'
 };
 
 export const clubsReducer = (state = initialState, action) => {
@@ -20,7 +22,6 @@ export const clubsReducer = (state = initialState, action) => {
     case SORT_CLUBS:
       return {
         ...state,
-        // items: state.clubs.items.map(club => club.city === state.clubs.city),
         sortedClubs: action.payload
       }
 
@@ -28,6 +29,14 @@ export const clubsReducer = (state = initialState, action) => {
       return {
         ...state,
         city: action.payload
+      }
+
+      case SELECT_LANG:
+        const city = state.city;
+        console.log(city);
+      return {
+        ...state,
+        lang: action.payload
       }
 
     default: return state;

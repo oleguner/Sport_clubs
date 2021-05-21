@@ -1,7 +1,7 @@
 export const filtersEng = [
   'All',
   'ABSASS',
-  'Acrobatics',
+  'Acro',
   'Animal Flow',
   'Barre',
   'Box',
@@ -15,7 +15,7 @@ export const filtersEng = [
   'Exotic',
   'Fat Burn',
   'Fitness',
-  'Fitness for pregnant',
+  'pregfit',
   'Fitness with baby',
   'Fly Stretching',
   'Fly Yoga',
