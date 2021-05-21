@@ -1,25 +1,90 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { connect } from 'react-redux';
 import { fetchClubs } from '../reducers/actions/clubsActions';
 
 import mainPhoto from '../img/main_photo.png';
 import mainIcon1 from '../img/main_icon1.png';
 import mainIcon2 from '../img/main_icon2.png';
 import mainIcon3 from '../img/main_icon3.png';
+import ClubsList from './ClubsList';
+import ClubsSlider from './ClubsSlider';
+
+import { filtersEng } from '../activities';
 
 function Main() {
   const dispatch = useDispatch();
   const clubs = useSelector(state => state.clubs.items);
-  console.log(clubs, 'clubs - main');
+  const cities = useSelector(state => console.log(state));
+  console.log(cities, 'cities');
+
+  const [isListActive, setListActive] = useState(true);
+  const [isSladerActive, setSliderActive] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+  const [sortedClubs, setSortedClubs] = useState(clubs);
 
   useEffect(() => {
     dispatch(fetchClubs());
-  }, [])
+  }, [dispatch]);
+
+  useEffect(() => {
+    setSortedClubs(clubs);
+  }, [clubs]);
+
+  const handleClubsDisplay = (e) => {
+    if (e.target.textContent === 'BY LIST') {
+      setListActive(true);
+      setSliderActive(false);
+    }
+
+    if (e.target.textContent === 'BY SLIDER') {
+      setSliderActive(true);
+      setListActive(false);
+    }
+  };
+
+  const handleSearch = (e) => {
+    setInputValue(e.target.value);
+    const filtredClubs = clubs.filter(club => club.activity.find(el =>
+      el.title.includes(e.target.value)
+      || el.slug.includes(e.target.value)));
+    setSortedClubs(filtredClubs);
+  };
+
+  const handleClubsActivitiesDisplay = (e) => {
+    const buttondsDiv = document.getElementById('activities-buttons');
+    if (e.target.textContent === 'Hide') {
+      e.target.textContent = 'Show';
+      buttondsDiv.classList = 'hidden';
+    } else {
+      e.target.textContent = 'Hide';
+      buttondsDiv.classList = 'block';
+    }
+
+  };
+
+  const handleClickFilter = (e) => {
+    setInputValue('');
+    if (e.target.textContent === 'All') {
+      setSortedClubs(clubs);
+      return;
+    }
+
+    const handleText = e.target.textContent.toLowerCase()
+      .replace(/ /g, '');
+    console.log(handleText);
+    const filtredClubs = clubs.filter(club => club.activity.find(el => {
+      const lowerCaseActivity1 = el.title.toLowerCase();
+      const lowerCaseActivity2 = el.slug.toLowerCase();
+
+      return lowerCaseActivity1.includes(handleText)
+        || lowerCaseActivity2.includes(handleText)
+    }));
+    setSortedClubs(filtredClubs);
+  }
 
   return (
-    <main className="bg-gradient-to-br from-transparent to-green-50">
+    <main className="bg-gradient-to-br from-transparent to-green-50 pb-16 overflow-hidden">
       <section className="mx-16 py-40 flex justify-between">
         <div className="">
           <img
@@ -78,11 +143,17 @@ function Main() {
             Choose a club
           </h2>
         </label>
-        <form action="#" className="relative w-96">
+        <form
+          action="#"
+          className="relative w-96 pb-16"
+          onSubmit={(e) => e.preventDefault()}
+        >
           <input
             id="clubs-choice"
             type="text"
             placeholder="your sport"
+            value={inputValue}
+            onChange={handleSearch}
             className="font-bold uppercase rounded-lg w-96 py-4 pl-4 text-gray-700 bg-gray-100 leading-tight focus:outline-none focus:shadow-outline lg:text-sm text-xs border-2 focus:border-gray-500 pr-6"
           />
 
@@ -93,9 +164,51 @@ function Main() {
         </form>
       </section>
 
-      <section>
-        {clubs.length > 0 && (<h2>{clubs.length}</h2>)}
-        {clubs.length === 0 && (<h2>Clubs length: {clubs.length}</h2>)}
+      <section className="mx-16 mb-8">
+        <span className="text-lg font-bold">Activities:</span>
+        <button
+          className="bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-1 px-2 border border-gray-500 hover:border-transparent rounded ml-4 transform -translate-y-2"
+          onClick={handleClubsActivitiesDisplay}
+        >
+          Hide
+        </button>
+        <br />
+        <div id="activities-buttons">
+          {filtersEng.map(sport =>
+            <button
+              className="bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-2 px-4 border border-gray-500 hover:border-transparent rounded mr-2 my-2"
+              onClick={handleClickFilter}
+            >
+              {sport}
+            </button>
+          )}
+        </div>
+      </section>
+
+      <section className="overflow-hidden">
+        <div className="mx-16 mb-16">
+          <span className="text-lg font-bold"> Show clubs:</span>
+
+          <button
+            className="bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-2 px-4 border border-gray-500 hover:border-transparent rounded mx-8"
+            onClick={handleClubsDisplay}
+          >
+            BY LIST
+          </button>
+
+          <button
+            className="bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-2 px-4 border border-gray-500 hover:border-transparent rounded"
+            onClick={handleClubsDisplay}
+          >
+            BY SLIDER
+          </button>
+        </div>
+
+        {sortedClubs.length > 0 && isListActive
+          && <ClubsList clubs={sortedClubs} />}
+
+        {sortedClubs.length > 0 && isSladerActive
+          && <ClubsSlider clubs={sortedClubs} />}
       </section>
     </main>
   )

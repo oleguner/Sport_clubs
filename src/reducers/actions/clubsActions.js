@@ -6,10 +6,15 @@ export const fetchClubs = () => (dispatch) => {
   fetch('https://instasport.co/dashboard/api/v1/clubs/')
     .then((response) => response.json())
     .then((clubs) => {
-      console.log(clubs, 'fetchClubs - clubactions');
+      const clubsWithId = clubs.map((club, index) => {
+        return {
+          ...club,
+          id: club.title.replace(/ /g, '') + index
+        }
+      })
       dispatch({
         type: FETCH_CLUBS,
-        payload: clubs,
+        payload: clubsWithId,
       })
     });
 }
