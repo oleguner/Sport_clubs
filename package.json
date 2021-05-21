@@ -1,5 +1,5 @@
 {
-  "homepage": "http://yuribenjamin.github.io/my-app",
+  "homepage": "https://oleguner.github.io/Sport_clubs/",
   "name": "sport-clubs",
   "version": "0.1.0",
   "private": true,
@@ -24,7 +24,9 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "yarn run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
